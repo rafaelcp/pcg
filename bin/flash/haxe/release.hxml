@@ -5,7 +5,6 @@
 -D tools=1
 -D openfl_ver=1.0.10
 -D openfl
--D fdb
 -D web
 -swf-lib sion065.swc
 -swf-version 11

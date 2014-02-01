@@ -71,9 +71,10 @@ class Level extends FlxState
 	private var _map:FlxTilemap; 
 	private var mapMatrix:Array<Array<Int>>; //array which stores all map positions
 	private var availableTiles:Array<FlxPoint>; //array which stores all positions there are not walls
+	private var scenarioType:Int;
 	private var _floor:FlxBackdrop; //background image
 	private var _edge:FlxSprite; //finish line
-	private var _interface:FlxSprite; //UI
+	private var _interface:FlxSprite; //HUD
 
 	//Background music
 	private var song:SiONData;
@@ -184,8 +185,9 @@ class Level extends FlxState
 		//if the player overlaps with the exit sprite, then it calls this anonymous function
 		//and fades the screen to the next state
 		FlxG.overlap(_player, _edge, onEnd);  
-			
-		FlxG.collide(_map, _player.staff.group, BulletHit);
+		
+		if(scenarioType != 3)
+			FlxG.collide(_map, _player.staff.group, BulletHit);
 		
 		FlxG.collide(_map, enemyGroup);
 		
@@ -381,8 +383,7 @@ class Level extends FlxState
 			}
 		}	
 	}
-	
-	
+		
 	private function createScenario():Void
 	{
 		/**
@@ -395,18 +396,18 @@ class Level extends FlxState
 		 * map.auto to either FlxTilemap.AUTO(for platform friendly tiling) or FlxTilemap.ALT(for the alternate top down tiling)
 		 */
 				 
-		var scenarioType:Int = 1;
+		scenarioType = 1;
 		 
 		//defines the type of scenario, 1=Dungeon, 2=Cave, 3=Maze
-		 if (level <= 10)
+		 if (level <= 5)
 		 {
 			scenarioType = 1;
 		 }		 
-		 else if (level <= 20)
+		 else if (level <= 10)
 		 {
 			scenarioType = 2;
 		 }
-		 else if (level <= 30)
+		 else if (level <= 20)
 		 {
 			scenarioType = 3;
 		 }
