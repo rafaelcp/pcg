@@ -1,0 +1,17 @@
+-main ApplicationMain 
+-lib openfl
+-lib flixel
+-cp source
+-D tools=1
+-D openfl_ver=1.0.10
+-D openfl
+-D fdb
+-D web
+-swf-lib sion065.swc
+-swf-version 11
+-swf bin/flash/bin/MageEscape.swf
+-swf-header 640:480:60:000000
+-cp bin/flash/haxe
+#--remap nme:flash
+--no-inline
+-debug

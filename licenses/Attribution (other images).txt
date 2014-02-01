@@ -1,0 +1,20 @@
+License
+-------
+
+CC-BY 4.0:
+ - http://creativecommons.org/licenses/by/4.0/
+
+-------
+
+Assets author: 
+
+Kael Fraga
+~~~~~~~~~~~~~~
+
+ - bullet.png
+ - interface.png
+ - mage.png
+ - menu.png
+ - mpbar.png
+ 
+ 

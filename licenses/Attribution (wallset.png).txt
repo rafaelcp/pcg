@@ -1,0 +1,17 @@
+License
+-------
+
+CC-BY 3.0:
+ - http://creativecommons.org/licenses/by/3.0/
+ - See the file: cc-by-3.0.txt
+
+-------
+
+This is a modification of 16x16 wall set by InanZen.
+
+I have modified the resulation of the image, removed 
+some tiles and changed the disposition of the tiles.
+
+-------
+
+Downloaded from <http://opengameart.org/content/16x16-wall-set>
