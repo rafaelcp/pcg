@@ -71,10 +71,9 @@ class Level extends FlxState
 	private var _map:FlxTilemap; 
 	private var mapMatrix:Array<Array<Int>>; //array which stores all map positions
 	private var availableTiles:Array<FlxPoint>; //array which stores all positions there are not walls
-	private var scenarioType:Int;
 	private var _floor:FlxBackdrop; //background image
 	private var _edge:FlxSprite; //finish line
-	private var _interface:FlxSprite; //HUD
+	private var _interface:FlxSprite; //UI
 
 	//Background music
 	private var song:SiONData;
@@ -185,9 +184,8 @@ class Level extends FlxState
 		//if the player overlaps with the exit sprite, then it calls this anonymous function
 		//and fades the screen to the next state
 		FlxG.overlap(_player, _edge, onEnd);  
-		
-		if(scenarioType != 3)
-			FlxG.collide(_map, _player.staff.group, BulletHit);
+			
+		FlxG.collide(_map, _player.staff.group, BulletHit);
 		
 		FlxG.collide(_map, enemyGroup);
 		
@@ -383,7 +381,8 @@ class Level extends FlxState
 			}
 		}	
 	}
-		
+	
+	
 	private function createScenario():Void
 	{
 		/**
@@ -396,18 +395,18 @@ class Level extends FlxState
 		 * map.auto to either FlxTilemap.AUTO(for platform friendly tiling) or FlxTilemap.ALT(for the alternate top down tiling)
 		 */
 				 
-		scenarioType = 1;
+		var scenarioType:Int = 1;
 		 
 		//defines the type of scenario, 1=Dungeon, 2=Cave, 3=Maze
-		 if (level <= 5)
+		 if (level <= 10)
 		 {
 			scenarioType = 1;
 		 }		 
-		 else if (level <= 10)
+		 else if (level <= 20)
 		 {
 			scenarioType = 2;
 		 }
-		 else if (level <= 20)
+		 else if (level <= 30)
 		 {
 			scenarioType = 3;
 		 }
@@ -525,11 +524,17 @@ class Level extends FlxState
 		
 		_mpBar = new FlxSprite(7,170);
 		_mpBar.loadGraphic("assets/mpbar.png", true, true, 60, 60);
-		_mpBar.addAnimation("stage1", [0]);
-		_mpBar.addAnimation("stage2", [1]); 
-		_mpBar.addAnimation("stage3", [2]); 
-		_mpBar.addAnimation("stage4", [3]); 
-		_mpBar.addAnimation("stage5", [4]);
+		_mpBar.addAnimation("stage0", [0]);
+		_mpBar.addAnimation("stage1", [1]);
+		_mpBar.addAnimation("stage2", [2]); 
+		_mpBar.addAnimation("stage3", [3]); 
+		_mpBar.addAnimation("stage4", [4]); 
+		_mpBar.addAnimation("stage5", [5]);
+		_mpBar.addAnimation("stage6", [6]);
+		_mpBar.addAnimation("stage7", [7]); 
+		_mpBar.addAnimation("stage8", [8]); 
+		_mpBar.addAnimation("stage9", [9]); 
+		_mpBar.addAnimation("stage10", [10]);
 		_mpBar.scrollFactor.x = _mpBar.scrollFactor.y = 0;
 		add(_mpBar);
 		
@@ -647,25 +652,19 @@ class Level extends FlxState
 	
 	private function manaBarAnimation():Void
 	{
-		if (_player.mana == 0)
+		switch(_player.mana)
 		{
-			_mpBar.play("stage1");
-		}		
-		else if (_player.mana < 3)
-		{
-			_mpBar.play("stage2");
-		}
-		else if (_player.mana < 6)
-		{
-			_mpBar.play("stage3");
-		}
-		else if (_player.mana < 8)
-		{
-			_mpBar.play("stage4");
-		}
-		else
-		{
-			_mpBar.play("stage5");
+			case 0: {_mpBar.play("stage0");}
+			case 1: {_mpBar.play("stage1");}
+			case 2: {_mpBar.play("stage2");}
+			case 3: {_mpBar.play("stage3");}
+			case 4: {_mpBar.play("stage4");}
+			case 5: {_mpBar.play("stage5");}
+			case 6: {_mpBar.play("stage6");}
+			case 7: {_mpBar.play("stage7");}
+			case 8: {_mpBar.play("stage8");}
+			case 9: {_mpBar.play("stage9");}	
+			case 10: {_mpBar.play("stage10");}	
 		}
 	}
 	
