@@ -16,13 +16,10 @@ Copyright (c) 2013 Kael Fraga
 */
 package procedural;
 
+
 import org.flixel.util.FlxPoint;
 import org.flixel.util.FlxRandom;
 
-/**
- * ...
- * @author Kael Fraga
- */
 class MazeGenerator
 {
 	private var MapWidth:Int;
@@ -31,11 +28,6 @@ class MazeGenerator
 	private var column:Int;
 	private	var row:Int;
 	
-	/**
-	 * 
-	 * @param	nCols	Number of columns in the map tilemap
-	 * @param	nRows	Number of rows in the map tilemap
-	 */	
 	public function new(nCols:Int = 10, nRows:Int = 10) 
 	{
 		MapWidth = nCols;
@@ -66,12 +58,10 @@ class MazeGenerator
 		
 		return mapString;
 	}	
-	
-	/*
-		Initializes the map matrix full of walls
-	*/	
+		
 	private function InitMatrix(rows:Int, cols:Int):Void
 	{
+		// Build array of 1s
 		_Map = new Array<Array<Int>>();
 		for (y in 0...(rows))
 		{
@@ -83,9 +73,6 @@ class MazeGenerator
 		}
 	}	
 	
-	/**
-	 * Sorts the array of directions
-	*/
 	private function mySort(x:Int, y:Int):Int {	
 		var r:Float = FlxRandom.float();
 		if (r < 1 / 3) return -1;
@@ -93,65 +80,63 @@ class MazeGenerator
 		else return 1;
 	}
 	
-	/**
-	 * Depth-first search (DFS) is an algorithm for traversing or searching 
-	 * tree or graph data structures. One starts at the root (selecting 
-	 * some arbitrary node as the root in the case of a graph) and explores 
-	 * as far as possible along each branch before backtracking. (Wikipedia)
-	 * 
-	 * @param	x	The X position to DFS go
-	 * @param	y	The Y position to DFS go
-	 * @param	w   The direction that DFS will "run"
-	*/
 	private function runDFS(x:Int,y:Int,w:Int):Void
 	{
-		if (!IsWall(x, y, w))
+		//trace("I RUN");
+		if (!IsWall(x, y,w))
 		{
 			_Map[y][x] = 0;
-					
-			var directions:Array<Int> = [1, 2, 3, 4];
-			directions.sort(mySort);
 			
-			for (i in 0 ... 4)
-			{
-				if (directions[i] == 1) runDFS(x, y - 1, 1);
-				if (directions[i] == 2) runDFS(x, y + 1, 2);
-				if (directions[i] == 3) runDFS(x + 1, y, 3);
-				if (directions[i] == 4) runDFS(x - 1, y, 4);
+			switch (w) {
+				case 1: _Map[y+1][x] = 0;
+				case 2:	_Map[y-1][x] = 0;
+				case 3:	_Map[y][x-1] = 0;
+				case 4:	_Map[y][x+1] = 0;
+			}
+			
+			
+			var options:Array<Int> = [1, 2, 3, 4];
+			options.sort(mySort);
+			for (i in 0 ... 4) {
+				if (options[i] == 1) runDFS(x, y - 2, 1);
+				if (options[i] == 2) runDFS(x, y + 2, 2);
+				if (options[i] == 3) runDFS(x + 2, y, 3);
+				if (options[i] == 4) runDFS(x - 2, y, 4);
 			}
 		}		
 	}
 
-	/**
-	 * Checks whether the DFS can keep running in that way
-	 * @param	x	The actual X position of DFS
-	 * @param	y	The actual Y position of DFS
-	 * @param	w   The actual direction of DFS
-	*/
 	private function IsWall(x:Int,y:Int,w:Int):Bool
 	{
+		
 		if( IsOutOfBounds(x,y) )
 		{
+			//trace("out");
 			return true;
 		}
-		/*
-		* 	Checks whether the analyzed position has already been traversed 
-		* 	or is a neighbor that has already been traversed
-		*/
+		//else if( _Map[y][x]==0 )
+		//{
+			//trace("zero 0");
+			//return true;
+		//}
 		else if( (_Map[y+1][x]==0) && ( w !=1 ))
 		{
-			return true;
-		}
-		else if( (_Map[y-1][x]==0) && ( w !=2 ))
-		{
-			return true;
-		}
-		else if( (_Map[y][x-1]==0) && ( w !=3 ))
-		{
+			//trace("zero 1");
 			return true;
 		}
 		else if( (_Map[y][x+1]==0) && ( w !=4 ))
 		{
+			//trace("zero 2");
+			return true;
+		}
+		else if( (_Map[y-1][x]==0) && ( w !=2 ))
+		{
+			//trace("zero 3");
+			return true;
+		}
+		else if( (_Map[y][x-1]==0) && ( w !=3 ) )
+		{
+			//trace("zero 4");
 			return true;
 		}
 		else if( _Map[y][x]==1 )
@@ -161,55 +146,62 @@ class MazeGenerator
 	 	
 		return false;
 	}
-	
-	/**
-	 * Checks whether the analyzed position is outside the map bounds
-	 * @param	x	The actual X position of DFS
-	 * @param	y	The actual Y position of DFS
-	*/
+ 
 	private function IsOutOfBounds(x:Int,y:Int):Bool
 	{
 		if( x<1 || y<1 )
 		{
+			//trace("less");
 			return true;
 		}
 		else if( x>MapWidth-2 || y>MapHeight-2 )
 		{
+			//trace("high");
 			return true;
 		}
 		return false;
 	}
 		
-	/**
-	 * Creates the exit hall
-	*/
 	private function MakeExit():Void
 	{
-		//The exit hall is a random tile in the extreme right of map connected to a maze hall
-		var y:Int = Math.ceil(FlxRandom.float() * (MapHeight - 4)+1);
-		var x:Int = MapWidth;
-		var dig:Bool = true;		
+		//The exit hall is a tile in the extreme right of map connected to a maze hall
+
+		var y:Int = 1;
+		var x:Int = 1;
+		var targ:FlxPoint = new FlxPoint(x,y);
 		
+		for (x in (Math.round(MapWidth/2))...(MapWidth-1))
+		{
+			for (y in 2...(MapHeight-1))
+			{			
+				if (_Map[y][x] == 0)
+				{
+					targ.x = x;
+					targ.y = y;
+				}
+			}
+		}
+		
+		x = MapWidth;
+		var dig:Bool = true;
 		do 
 		{ 	
 			x--;
 				
-			if (_Map[y][x] == 0)
+			if ( x == Math.round(targ.x))
 				dig = false;
 			
-			_Map[y][x] = 0;
+			_Map[Math.round(targ.y)][x] = 0;
 		} 
-		while (dig);			
+		while (dig);
+ 		
 	}
 	
-	/**
-	 * @return 	The finished map to the level
-	*/
 	public function SendMaze():Array<Array<Int>>
 	{
 		InitMatrix(MapHeight, MapWidth);
 		
-		var x:Int = 1;
+		var x:Int = 2;
 		var y:Int = Math.ceil(FlxRandom.float() * (MapHeight - 4)+1);
 		var w:Int = 0;
 		
