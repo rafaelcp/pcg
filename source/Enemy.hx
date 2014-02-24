@@ -67,6 +67,8 @@ class Enemy extends FlxSprite
 		var distX:Int = Math.round(this.x - targ.x);
 		var distY:Int = Math.round(this.y - targ.y);
 		
+		if ( this.onScreen() )
+		{
 		if (distX > 5) {
 			this.velocity.x = -30;
 			this.facing = FlxObject.LEFT;
@@ -94,6 +96,7 @@ class Enemy extends FlxSprite
 			this.velocity.y = 30;
 			this.facing = FlxObject.DOWN;
 			
+		}
 		}
 
 		super.update();

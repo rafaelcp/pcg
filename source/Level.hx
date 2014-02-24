@@ -187,9 +187,10 @@ class Level extends FlxState
 		FlxG.overlap(_player, _edge, onEnd);  
 		
 		if (_mapType != 3)
+		{
 			FlxG.collide(_map, _player.staff.group, BulletHit);
-		
-		FlxG.collide(_map, enemyGroup);
+			FlxG.collide(_map, enemyGroup);
+		}
 		
 		FlxG.collide(enemyGroup, enemyGroup);
 		
